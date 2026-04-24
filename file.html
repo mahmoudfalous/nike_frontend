@@ -1,431 +1,166 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stylish Free eCommerce Shoe Store</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap"
-        rel="stylesheet">
+    <title>Stylish | Nike Authorized Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="file.css">
 </head>
-
 <body>
 
-    <!-- Announcement -->
-    <div class="announcement">🚚 Free shipping on orders over $75 &nbsp;|&nbsp; New arrivals every Friday &nbsp;|&nbsp;
-        Use code STYLISH10 for 10% off</div>
+<div class="announcement">🚚 Free shipping on orders over $75 | New Nike arrivals every Friday</div>
 
-    <!-- Navbar -->
-    <nav>
-        <div class="logo">Styli<span>sh</span></div>
-        <ul class="nav-links">
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="category.html?slug=men">Men</a></li>
-            <li><a href="category.html?slug=women">Women</a></li>
-            <li><a href="category.html?slug=kids">Kids</a></li>
-            <li><a href="category.html?slug=sports">Sports</a></li>
-            <li><a href="category.html?slug=sale" style="color:var(--red);font-weight:700;">Sale</a></li>
-            <li><a href="orders.html">Orders</a></li>
-        </ul>
-        <div class="nav-auth" data-site-auth></div>
-        <div class="nav-icons">
-            <button title="Search">🔍</button>
-            <button title="Wishlist">♡</button>
-            <button title="Cart" id="cartBtn" style="position:relative;">🛒
-                <span class="cart-count" id="cartCount">0</span>
-            </button>
-        </div>
-    </nav>
+<nav>
+    <div class="logo"><a href="file.html" style="text-decoration:none; color:inherit;">Styli<span>sh</span></a></div>
+    <ul class="nav-links">
+        <li><a href="file.html" class="active">Home</a></li>
+        <li><a href="category.html?slug=men">Men</a></li>
+        <li><a href="category.html?slug=women">Women</a></li>
+        <li><a href="category.html?slug=kids">Kids</a></li>
+        <li><a href="category.html?slug=sports">Sports</a></li>
+        <li><a href="category.html?slug=sale" style="color:var(--red); font-weight:700;">Sale</a></li>
+    </ul>
 
-    <!-- Hero Slider -->
-    <div class="hero">
-        <div class="slides" id="slides" style="transform: translateX(0%);">
-            <!-- Slide 1 -->
-            <div class="slide">
-                <div class="slide-left">
-                    <span class="slide-badge">New Collection 2024</span>
-                    <h1 class="slide-title">Stylish Shoes<br>for Women</h1>
-                    <p class="slide-sub">Discover the latest trends in footwear.<br>Comfort meets style in every step.
-                    </p>
-                    <a href="#featured" class="btn-primary">Shop Now →</a>
-                </div>
-                <div class="slide-right" style="background:#1a1a2e;">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&amp;q=80"
-                        alt="Featured Shoe">
-                    <div class="slide-right-overlay">
-                        <h3>Air Max<br>Collection</h3>
-                        <a href="#" class="btn-outline">Explore</a>
-                    </div>
-                </div>
+    <div class="nav-auth" data-site-auth></div>
+
+    <div class="nav-icons">
+        <button title="Cart" id="cartBtn" style="position:relative; background:none; border:none; cursor:pointer; font-size:1.2rem;">
+            🛒 <span class="cart-count" id="cartCount">0</span>
+        </button>
+    </div>
+</nav>
+
+<div class="hero">
+    <div class="slides" id="slides">
+        <div class="slide">
+            <div class="slide-left">
+                <span class="slide-badge">Nike Air Collection</span>
+                <h1 class="slide-title">Nike Air<br>Force 1</h1>
+                <p class="slide-sub">The legend lives on in the Nike Air Force 1, staying true to its roots with iconic style.</p>
+                <a href="category.html?slug=men" class="btn-primary">Shop Collection →</a>
             </div>
-            <!-- Slide 2 -->
-            <div class="slide">
-                <div class="slide-left">
-                    <span class="slide-badge">Sports Wear</span>
-                    <h1 class="slide-title">Run Faster,<br>Go Further</h1>
-                    <p class="slide-sub">High-performance athletic footwear<br>designed for champions.</p>
-                    <a href="#featured" class="btn-primary">Shop Now →</a>
-                </div>
-                <div class="slide-right" style="background:#0d1b2a;">
-                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=800&amp;q=80"
-                        alt="Sports Shoe">
-                    <div class="slide-right-overlay">
-                        <h3>Pro Runner<br>Series</h3>
-                        <a href="#" class="btn-outline">Explore</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Slide 3 -->
-            <div class="slide">
-                <div class="slide-left">
-                    <span class="slide-badge">Fashion Shoes</span>
-                    <h1 class="slide-title">Define Your<br>Own Style</h1>
-                    <p class="slide-sub">Bold designs for bold personalities.<br>Step out in confidence.</p>
-                    <a href="#featured" class="btn-primary">Shop Now →</a>
-                </div>
-                <div class="slide-right" style="background:#2d1b00;">
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=800&amp;q=80"
-                        alt="Fashion Shoe">
-                    <div class="slide-right-overlay">
-                        <h3>Urban Street<br>Collection</h3>
-                        <a href="#" class="btn-outline">Explore</a>
-                    </div>
-                </div>
+            <div class="slide-right" style="background:#1a1a2e;">
+                <img src="https://images.unsplash.com/photo-1600180758890-6b94519a8ba6" alt="Nike Air Force 1">
             </div>
         </div>
-        <button class="hero-arrow prev" id="prevBtn">‹</button>
-        <button class="hero-arrow next" id="nextBtn">›</button>
-        <div class="hero-dots" id="dots">
-            <button class="dot active" data-index="0"></button>
-            <button class="dot" data-index="1"></button>
-            <button class="dot" data-index="2"></button>
+        <div class="slide">
+            <div class="slide-left">
+                <span class="slide-badge">Performance</span>
+                <h1 class="slide-title">ZoomX<br>Vaporfly</h1>
+                <p class="slide-sub">Engineered for the fastest runners. High-energy return for your best performance.</p>
+                <a href="category.html?slug=sports" class="btn-primary">Shop Sports →</a>
+            </div>
+            <div class="slide-right" style="background:#0d1b2a;">
+                <img src="https://images.unsplash.com/photo-1600180758895-8d3b3b8c3f6c" alt="Nike Sports">
+            </div>
         </div>
     </div>
+    <button class="hero-arrow prev" id="prevBtn">‹</button>
+    <button class="hero-arrow next" id="nextBtn">›</button>
+</div>
 
-    <!-- Category Banners -->
-    <div class="categories">
-        <a class="cat-card" href="category.html?slug=men">
-            <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&amp;q=80" alt="Men">
-            <div class="cat-overlay">
-                <h3>Men's</h3>
-                <span>Explore Collection</span>
-            </div>
-        </a>
-        <a class="cat-card" href="category.html?slug=women">
-            <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=600&amp;q=80" alt="Women">
-            <div class="cat-overlay">
-                <h3>Women's</h3>
-                <span>Explore Collection</span>
-            </div>
-        </a>
-        <a class="cat-card" href="category.html?slug=kids">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&amp;q=80" alt="Kids">
-            <div class="cat-overlay">
-                <h3>Kids'</h3>
-                <span>Explore Collection</span>
-            </div>
-        </a>
+<div class="categories">
+    <a class="cat-card" href="category.html?slug=men">
+        <img src="https://images.unsplash.com/photo-1584735175315-9d5df23be620" alt="Men">
+        <div class="cat-overlay"><h3>Men's</h3><span>Explore</span></div>
+    </a>
+    <a class="cat-card" href="category.html?slug=women">
+        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519" alt="Women">
+        <div class="cat-overlay"><h3>Women's</h3><span>Explore</span></div>
+    </a>
+    <a class="cat-card" href="category.html?slug=kids">
+        <img src="https://images.unsplash.com/photo-1608231387042-66d1773070a5" alt="Kids">
+        <div class="cat-overlay"><h3>Kids'</h3><span>Explore</span></div>
+    </a>
+</div>
+
+<section class="section" style="padding-bottom: 0;">
+    <div class="section-header">
+        <div>
+            <span class="catalog-eyebrow">Premium Selection</span>
+            <h2>Elite Nike Performance</h2>
+        </div>
+        <a href="category.html?slug=all" class="view-all-link">Browse Catalog ↗</a>
     </div>
+    <div class="products-grid" id="featuredGrid">
+        <div class="empty-state">Loading premium footwear...</div>
+    </div>
+</section>
 
-    <!-- Featured Products -->
-    <section class="section" id="featured">
-        <div class="section-header">
-            <h2>Featured Products</h2>
-            <a href="category.html?slug=all">View All</a>
+<section class="section">
+    <div class="section-header">
+        <div>
+            <span class="catalog-eyebrow">Just Dropped</span>
+            <h2>New Arrivals</h2>
         </div>
-        <div class="products-grid" id="productsGrid">
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">New</div>
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&amp;q=80"
-                        alt="Air Force 1 '07" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(1)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★★</div>
-                <div class="product-brand">Nike</div>
-                <div class="product-name">Air Force 1 '07</div>
-                <div class="product-price">
-                    <span class="price-current">$110</span>
-                    <span class="price-old">$140</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">Sale</div>
-                    <img src="https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=400&amp;q=80"
-                        alt="Stan Smith" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(2)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★☆</div>
-                <div class="product-brand">Adidas</div>
-                <div class="product-name">Stan Smith</div>
-                <div class="product-price">
-                    <span class="price-current">$85</span>
-                    <span class="price-old">$100</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
+        <a href="category.html?slug=all" class="view-all-link">Explore All ↗</a>
+    </div>
+    <div class="products-grid" id="latestGrid">
+        <div class="empty-state">Loading new arrivals...</div>
+    </div>
+</section>
 
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&amp;q=80"
-                        alt="Classic Leather" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(3)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★☆</div>
-                <div class="product-brand">Reebok</div>
-                <div class="product-name">Classic Leather</div>
-                <div class="product-price">
-                    <span class="price-current">$75</span>
+<div class="discount-banner">
+    <div class="discount-text">
+        <h2>JOIN THE FAMILY</h2>
+        <p>Get the latest on Nike drops and exclusive offers.</p>
+    </div>
+    <div class="discount-big">10%</div>
+    <div class="discount-form">
+        <input type="email" placeholder="Email address">
+        <button class="btn-primary">Subscribe</button>
+    </div>
+</div>
 
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">Hot</div>
-                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&amp;q=80"
-                        alt="574 Core" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(4)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★★</div>
-                <div class="product-brand">New Balance</div>
-                <div class="product-name">574 Core</div>
-                <div class="product-price">
-                    <span class="price-current">$95</span>
-                    <span class="price-old">$120</span>
-                </div>
-            </div>
+<footer>
+    <div class="footer-grid">
+        <div>
+            <div class="footer-logo">Styli<span>sh</span></div>
+            <p class="footer-desc">Premium Nike authorized retailer. Delivering performance and style since 2024.</p>
         </div>
-    </section>
-
-    <!-- Discount Banner -->
-    <div class="discount-banner">
-        <div class="discount-text">
-            <h2>10% OFF Discount Coupons</h2>
-            <p>Subscribe to get 10% OFF on all the purchases</p>
-        </div>
-        <div class="discount-big">10%</div>
-        <div class="discount-form">
-            <input type="email" placeholder="Enter your email address">
-            <button>Email Me</button>
+        <div class="footer-col">
+            <h4>Shop</h4>
+            <ul>
+                <li><a href="category.html?slug=men">Men</a></li>
+                <li><a href="category.html?slug=women">Women</a></li>
+                <li><a href="category.html?slug=kids">Kids</a></li>
+                <li><a href="category.html?slug=sale">Sale</a></li>
+            </ul>
         </div>
     </div>
-
-    <!-- Collections -->
-    <section class="section">
-        <div class="section-header">
-            <h2>Our Collections</h2>
-            <a href="category.html?slug=all">View All</a>
-        </div>
-        <div class="collections-grid">
-            <div class="coll-card">
-                <img src="https://images.unsplash.com/photo-1556906781-9a412961a28c?w=800&amp;q=80"
-                    alt="Minimal Collection">
-                <div class="coll-overlay">
-                    <h3>Minimal Collection</h3>
-                    <p>Clean lines, pure form</p>
-                    <a href="#" class="btn-primary" style="font-size:10px;padding:10px 20px;">Shop Now →</a>
-                </div>
-            </div>
-            <div class="coll-card">
-                <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=800&amp;q=80" alt="Sneakers">
-                <div class="coll-overlay">
-                    <h3>Sneakers</h3>
-                    <p>Street-ready classics</p>
-                    <a href="#" class="btn-primary" style="font-size:10px;padding:10px 20px;">Shop Now →</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Latest Products -->
-    <section class="section" style="background:var(--gray-light);">
-        <div class="section-header">
-            <h2>Latest Products</h2>
-            <a href="category.html?slug=all">View All</a>
-        </div>
-        <div class="products-grid" id="latestGrid">
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">New</div>
-                    <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&amp;q=80" alt="RS-X Toys"
-                        loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(5)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★☆</div>
-                <div class="product-brand">Puma</div>
-                <div class="product-name">RS-X Toys</div>
-                <div class="product-price">
-                    <span class="price-current">$110</span>
-                    <span class="price-old">$130</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
-
-                    <img src="https://images.unsplash.com/photo-1512374382149-233c42b6a83b?w=400&amp;q=80"
-                        alt="Chuck Taylor" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(6)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★★</div>
-                <div class="product-brand">Converse</div>
-                <div class="product-name">Chuck Taylor</div>
-                <div class="product-price">
-                    <span class="price-current">$65</span>
-
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">Sale</div>
-                    <img src="https://images.unsplash.com/photo-1556906781-9a412961a28c?w=400&amp;q=80" alt="Old Skool"
-                        loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(7)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★☆</div>
-                <div class="product-brand">Vans</div>
-                <div class="product-name">Old Skool</div>
-                <div class="product-price">
-                    <span class="price-current">$70</span>
-                    <span class="price-old">$85</span>
-                </div>
-            </div>
-            <div class="product-card">
-                <div class="product-img">
-                    <div class="product-tag">Hot</div>
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&amp;q=80"
-                        alt="Ultraboost 22" loading="lazy">
-                    <div class="product-actions">
-                        <button onclick="addToCart(8)">Add to Cart</button>
-                        <button class="icon-btn">♡</button>
-                    </div>
-                </div>
-                <div class="stars">★★★★★</div>
-                <div class="product-brand">Adidas</div>
-                <div class="product-name">Ultraboost 22</div>
-                <div class="product-price">
-                    <span class="price-current">$180</span>
-                    <span class="price-old">$210</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Brands -->
-    <div class="brands">
-        <div class="brand-item">NIKE</div>
-        <div class="brand-item">ADIDAS</div>
-        <div class="brand-item">PUMA</div>
-        <div class="brand-item">NEW BALANCE</div>
-        <div class="brand-item">CONVERSE</div>
-        <div class="brand-item">VANS</div>
-        <div class="brand-item">REEBOK</div>
+    <div class="footer-bottom">
+        <p>© 2026 Stylish Nike Store. All rights reserved.</p>
     </div>
+</footer>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-grid">
-            <div>
-                <div class="footer-logo">Styli<span>sh</span></div>
-                <p class="footer-desc">Your destination for the world's best footwear. We curate the finest shoes from
-                    top brands, bringing style and comfort to your doorstep.</p>
-                <div class="social-links">
-                    <a href="#">f</a>
-                    <a href="#">𝕏</a>
-                    <a href="#">in</a>
-                    <a href="#">◎</a>
-                </div>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Shop</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Categories</h4>
-                <ul>
-                    <li><a href="#">Men's Shoes</a></li>
-                    <li><a href="#">Women's Shoes</a></li>
-                    <li><a href="#">Kids' Shoes</a></li>
-                    <li><a href="#">Sports</a></li>
-                    <li><a href="#">Sale</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Support</h4>
-                <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Shipping Info</a></li>
-                    <li><a href="#">Returns</a></li>
-                    <li><a href="#">Size Guide</a></li>
-                    <li><a href="#">Track Order</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2024 Stylish. All rights reserved.</p>
-            <p>Privacy Policy · Terms of Service</p>
-        </div>
-    </footer>
-
-    <!-- Cart Sidebar -->
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <div class="cart-sidebar" id="cartSidebar">
-        <div class="cart-header">
-            <h3>Shopping Cart</h3>
-            <button class="cart-close" id="cartClose">✕</button>
-        </div>
-        <div class="cart-items" id="cartItems">
-            <div class="cart-empty">
-                <div class="icon">🛒</div>
-                <p>Your cart is empty</p>
-            </div>
-        </div>
-        <div class="cart-footer" id="cartFooter" style="display:none;">
-            <div class="cart-total">
-                <span>Total</span>
-                <span id="cartTotal">$0.00</span>
-            </div>
-            <button class="btn-checkout">Proceed to Checkout →</button>
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+        <h3>Shopping Cart</h3>
+        <button class="cart-close" id="cartClose">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+        <div class="cart-empty">
+            <div class="icon">🛒</div>
+            <p>Your cart is empty</p>
         </div>
     </div>
-
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <span>✓</span>
-        <span id="toastMsg">Added to cart!</span>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+        <div class="cart-total">
+            <span>Total</span>
+            <span id="cartTotal">$0.00</span>
+        </div>
+        <button class="btn-checkout" id="cartCheckoutBtn">Proceed to Checkout →</button>
     </div>
+</div>
 
-    <script src="site.js"></script>
-    <script src="main.js"></script>
+<div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMsg">Added to cart!</span>
+</div>
 
-
+<script src="site.js"></script>
+<script src="main.js"></script>
 </body>
-
 </html>

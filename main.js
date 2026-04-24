@@ -2,206 +2,197 @@
   const store = window.NikeStore;
   if (!store) return;
 
-  const productsGrid = document.getElementById('productsGrid');
+  const featuredGrid = document.getElementById('featuredGrid');
   const latestGrid = document.getElementById('latestGrid');
   const cartBtn = document.getElementById('cartBtn');
+  const cartCount = document.getElementById('cartCount');
   const cartOverlay = document.getElementById('cartOverlay');
   const cartSidebar = document.getElementById('cartSidebar');
   const cartClose = document.getElementById('cartClose');
-  const cartCount = document.getElementById('cartCount');
   const cartItems = document.getElementById('cartItems');
   const cartFooter = document.getElementById('cartFooter');
   const cartTotal = document.getElementById('cartTotal');
-  const slidesEl = document.getElementById('slides');
-  const dotsEl = document.querySelectorAll('.dot');
 
+  // Initialize Auth UI
   store.renderAuthNav('[data-site-auth]');
 
-  const localCart = [];
-  let currentProducts = [];
-  let current = 0;
-  const totalSlides = 3;
+  /**
+   * Catalog Redesign Logic:
+   * Splits products into 'Premium' (Price >= 130) and 'Standard' (Price < 130)
+   */
+  function renderHomeCatalog(products) {
+    if (!products || products.length === 0) return;
 
-  function normalizeProduct(product) {
+    // 1. Filter Premium (Nike elite shoes like Vaporfly, Air Max)
+    const premium = products
+      .filter(p => parseFloat(p.price) >= 130)
+      .slice(0, 4);
+
+    // 2. Filter Standard (Nike classics like AF1, Downshifter)
+    const standard = products
+      .filter(p => parseFloat(p.price) < 130)
+      .slice(0, 4);
+
+    if (featuredGrid) {
+      featuredGrid.innerHTML = premium.map(p =>
+        store.productCardHTML(p, { showCategory: true, actionLabel: 'Quick Add' })
+      ).join('');
+    }
+
+    if (latestGrid) {
+      latestGrid.innerHTML = standard.map(p =>
+        store.productCardHTML(p, { showCategory: true, actionLabel: 'Quick Add' })
+      ).join('');
+    }
+  }
+
+  function normalizeCartItems(payload) {
+    return Array.isArray(payload)
+      ? payload
+      : (payload?.results || payload?.items || payload?.cart_items || payload?.data || []);
+  }
+
+  function getCartProduct(item) {
+    return item.product || item.product_detail || item;
+  }
+
+  function buildProductImageMap(products) {
+    const map = new Map();
+    (products || []).forEach((product) => {
+      const key = String(product?.id ?? product?.pk ?? '');
+      if (key) map.set(key, product);
+    });
+    return map;
+  }
+
+  function extractProductId(item, product) {
+    if (typeof item.product === 'number' || typeof item.product === 'string') return String(item.product);
+    if (typeof item.product_id === 'number' || typeof item.product_id === 'string') return String(item.product_id);
+    if (product?.id !== undefined && product?.id !== null) return String(product.id);
+    if (product?.pk !== undefined && product?.pk !== null) return String(product.pk);
+    return '';
+  }
+
+  function getCartLineView(item, productMap) {
+    const product = getCartProduct(item);
+    const productId = extractProductId(item, product);
+    const catalogProduct = productMap?.get(productId);
+    const resolvedProduct = (product && typeof product === 'object' ? product : null) || catalogProduct || {};
+    const quantity = Number(item.quantity || item.qty || 1);
+    const unitPrice = Number(item.product_price ?? item.price ?? resolvedProduct.price ?? 0);
+    const lineTotal = Number(item.total ?? (unitPrice * quantity));
+
     return {
-      ...product,
-      id: product.id ?? product.product_id ?? product.pk,
-      img: product.img || product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
-      rating: product.rating ?? 5,
-      category: product.category || product.collection || product.brand || 'featured'
+      image: item.product_image || item.image_url || resolvedProduct.image_url || resolvedProduct.img || resolvedProduct.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80',
+      name: item.product_name || resolvedProduct.name || `Product #${item.product || item.id || ''}`.trim(),
+      brand: resolvedProduct.brand || resolvedProduct.category_name || 'Nike',
+      quantity,
+      unitPrice,
+      lineTotal,
+      rowId: item.id ?? item.pk
     };
   }
 
-  function productCardHTML(product) {
-    return store.productCardHTML(product, { actionLabel: 'Add to Cart', showCategory: true });
+  function openCart() {
+    cartOverlay?.classList.add('open');
+    cartSidebar?.classList.add('open');
   }
 
-  function renderCatalog(products) {
-    const featured = products.slice(0, 4).map(normalizeProduct);
-    const latest = products.slice(4, 8).map(normalizeProduct);
-    productsGrid.innerHTML = featured.map(productCardHTML).join('') || '<div class="empty-state">No featured products.</div>';
-    latestGrid.innerHTML = latest.map(productCardHTML).join('') || '<div class="empty-state">No latest products.</div>';
-    currentProducts = products.map(normalizeProduct);
+  function closeCart() {
+    cartOverlay?.classList.remove('open');
+    cartSidebar?.classList.remove('open');
   }
 
-  function openCart() { cartOverlay.classList.add('open'); cartSidebar.classList.add('open'); }
-  function closeCart() { cartOverlay.classList.remove('open'); cartSidebar.classList.remove('open'); }
-
-  function renderLocalCart() {
-    const count = localCart.reduce((sum, item) => sum + item.qty, 0);
-    cartCount.textContent = String(count);
-
-    if (localCart.length === 0) {
-      cartItems.innerHTML = `<div class="cart-empty"><div class="icon">🛒</div><p>Your cart is empty</p></div>`;
-      cartFooter.style.display = 'none';
-      return;
-    }
-
-    cartItems.innerHTML = localCart.map((item) => `
-      <div class="cart-item">
-        <div class="cart-item-img"><img src="${item.img}" alt="${item.name}"></div>
-        <div class="cart-item-info">
-          <div class="cart-item-brand">${item.brand || ''}</div>
-          <div class="cart-item-name">${item.name}</div>
-          <div class="cart-item-price">${store.currency(item.price * item.qty)} ${item.qty > 1 ? `<small style="color:var(--gray-text);font-size:11px;">×${item.qty}</small>` : ''}</div>
-        </div>
-        <button class="cart-item-remove" onclick="removeFromCart(${JSON.stringify(item.id)})">✕</button>
-      </div>
-    `).join('');
-    cartTotal.textContent = store.currency(localCart.reduce((sum, item) => sum + item.price * item.qty, 0));
-    cartFooter.style.display = 'block';
-  }
-
-  async function syncCart() {
+  async function renderCart() {
     try {
-      const data = await store.getCart();
-      if (Array.isArray(data) && data.length) {
-        cartCount.textContent = String(data.reduce((sum, item) => sum + Number(item.quantity || item.qty || 1), 0));
-        cartItems.innerHTML = data.map((item) => {
-          const product = item.product || item.product_detail || item;
-          const qty = Number(item.quantity || item.qty || 1);
-          const price = Number(item.price ?? product.price ?? 0);
-          const itemId = item.id ?? item.pk ?? product.id;
-          return `
-            <div class="cart-item">
-              <div class="cart-item-img"><img src="${product.img || product.image || product.thumbnail || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80'}" alt="${product.name || 'Cart item'}"></div>
-              <div class="cart-item-info">
-                <div class="cart-item-brand">${product.brand || ''}</div>
-                <div class="cart-item-name">${product.name || 'Cart item'}</div>
-                <div class="cart-item-price">${store.currency(price * qty)} ${qty > 1 ? `<small style="color:var(--gray-text);font-size:11px;">×${qty}</small>` : ''}</div>
-              </div>
-              <button class="cart-item-remove" onclick="removeFromCart(${JSON.stringify(itemId)})">✕</button>
-            </div>
-          `;
-        }).join('');
-        const totalData = await store.getCartTotal();
-        const total = Number(totalData?.total ?? totalData?.amount ?? totalData ?? 0);
-        cartTotal.textContent = store.currency(total);
-        cartFooter.style.display = 'block';
+      const items = normalizeCartItems(await store.getCart());
+      const missingAnyImage = items.some((item) => {
+        const product = getCartProduct(item);
+        return !(item.product_image || item.image_url || product?.image_url || product?.img || product?.image);
+      });
+      const productMap = missingAnyImage
+        ? buildProductImageMap(await store.getProducts().catch(() => []))
+        : new Map();
+
+      const count = items.reduce((sum, item) => sum + Number(item.quantity || item.qty || 1), 0);
+      if (cartCount) cartCount.textContent = String(count);
+
+      if (!cartItems || !cartFooter || !cartTotal) return;
+      if (!items.length) {
+        cartItems.innerHTML = '<div class="cart-empty"><div class="icon">🛒</div><p>Your cart is empty</p></div>';
+        cartFooter.style.display = 'none';
         return;
       }
+
+      cartItems.innerHTML = items.map((item) => {
+        const line = getCartLineView(item, productMap);
+
+        return `
+          <div class="cart-item">
+            <div class="cart-item-img"><img src="${line.image}" alt="${line.name}"></div>
+            <div class="cart-item-info">
+              <div class="cart-item-brand">${line.brand}</div>
+              <div class="cart-item-name">${line.name}</div>
+              <div class="cart-item-price">${store.currency(line.lineTotal)} ${line.quantity > 1 ? `<small style="color:var(--gray-text);font-size:11px;">×${line.quantity}</small>` : ''}</div>
+            </div>
+            <button class="cart-item-remove" data-remove-item="${line.rowId}">✕</button>
+          </div>
+        `;
+      }).join('');
+
+      cartItems.querySelectorAll('[data-remove-item]').forEach((button) => {
+        button.addEventListener('click', async () => {
+          try {
+            await store.removeCartItem(button.dataset.removeItem);
+            store.showToast('Item removed');
+            renderCart();
+          } catch (error) {
+            store.showToast(error.message || 'Could not remove item');
+          }
+        });
+      });
+
+      const totalPayload = await store.getCartTotal();
+      const fallbackTotal = items.reduce((sum, item) => sum + Number(item.total ?? 0), 0);
+      const total = Number(totalPayload?.total ?? totalPayload?.amount ?? fallbackTotal);
+      cartTotal.textContent = store.currency(total);
+      cartFooter.style.display = 'block';
     } catch (_) {
-      // fall back to local cart below
+      if (cartCount) cartCount.textContent = '0';
     }
-    renderLocalCart();
   }
 
-  async function addToCart(id) {
-    const product = currentProducts.find((item) => String(item.id) === String(id)) || store.fallbackProducts.find((item) => String(item.id) === String(id));
-    if (!product) return;
+  // Slider Logic
+  let currentSlide = 0;
+  const slides = document.getElementById('slides');
+  function goToSlide(n) {
+    const slideList = document.querySelectorAll('.slide');
+    currentSlide = (n + slideList.length) % slideList.length;
+    if (slides) slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }
 
+  // Initialize Page
+  async function init() {
     try {
-      await store.addToCart(id, 1);
-      store.showToast(`${product.name} added to cart`);
-      await syncCart();
-    } catch (_) {
-      const existing = localCart.find((item) => String(item.id) === String(id));
-      if (existing) existing.qty += 1;
-      else localCart.push({ ...product, qty: 1 });
-      renderLocalCart();
-      store.showToast(`${product.name} added to cart`);
+      const products = await store.getProducts();
+      renderHomeCatalog(products);
+      renderCart();
+    } catch (err) {
+      console.error("Home Init Error:", err);
+      // Optional: renderHomeCatalog(store.fallbackProducts);
     }
   }
 
-  async function removeFromCart(id) {
-    try {
-      await store.removeCartItem(id);
-      await syncCart();
-      store.showToast('Item removed');
-    } catch (_) {
-      const index = localCart.findIndex((item) => String(item.id) === String(id));
-      if (index >= 0) localCart.splice(index, 1);
-      renderLocalCart();
-    }
-  }
-
-  async function clearLocalCart() {
-    try {
-      await store.clearCart();
-      await syncCart();
-      store.showToast('Cart cleared');
-    } catch (_) {
-      localCart.length = 0;
-      renderLocalCart();
-    }
-  }
-
-  window.addToCart = addToCart;
-  window.removeFromCart = removeFromCart;
-
-  function goTo(n) {
-    current = (n + totalSlides) % totalSlides;
-    slidesEl.style.transform = `translateX(-${current * 100}%)`;
-    dotsEl.forEach((dot, index) => dot.classList.toggle('active', index === current));
-  }
-
-  async function initCatalog() {
-    const products = await store.getProducts();
-    renderCatalog(products);
-  }
-
-  cartBtn?.addEventListener('click', openCart);
+  // Event Listeners
+  document.getElementById('nextBtn')?.addEventListener('click', () => goToSlide(currentSlide + 1));
+  document.getElementById('prevBtn')?.addEventListener('click', () => goToSlide(currentSlide - 1));
+  cartBtn?.addEventListener('click', () => {
+    openCart();
+    renderCart();
+  });
   cartClose?.addEventListener('click', closeCart);
   cartOverlay?.addEventListener('click', closeCart);
+  window.addEventListener('nike:cart-updated', renderCart);
 
-  document.getElementById('prevBtn')?.addEventListener('click', () => goTo(current - 1));
-  document.getElementById('nextBtn')?.addEventListener('click', () => goTo(current + 1));
-  dotsEl.forEach((dot) => dot.addEventListener('click', () => goTo(Number(dot.dataset.index))));
-
-  if (slidesEl?.parentElement) {
-    let autoSlide = window.setInterval(() => goTo(current + 1), 5000);
-    slidesEl.parentElement.addEventListener('mouseenter', () => window.clearInterval(autoSlide));
-    slidesEl.parentElement.addEventListener('mouseleave', () => {
-      autoSlide = window.setInterval(() => goTo(current + 1), 5000);
-    });
-  }
-
-  document.querySelector('.discount-form button')?.addEventListener('click', () => {
-    const input = document.querySelector('.discount-form input');
-    if (input && input.value.includes('@')) {
-      store.showToast(`🎉 Coupon sent to ${input.value}`);
-      input.value = '';
-    } else if (input) {
-      input.style.borderColor = 'var(--red)';
-      window.setTimeout(() => (input.style.borderColor = 'var(--black)'), 2000);
-    }
-  });
-
-  initCatalog().catch(() => renderCatalog(store.fallbackProducts));
-  syncCart();
-
-  const checkoutBtn = document.querySelector('.btn-checkout');
-  checkoutBtn?.addEventListener('click', async () => {
-    try {
-      await store.createOrder();
-      store.showToast('Order created');
-      await syncCart();
-      window.location.href = 'orders.html';
-    } catch (error) {
-      store.showToast(error.message || 'Could not proceed to checkout');
-    }
-  });
-
-  document.getElementById('cartFooter')?.insertAdjacentHTML('beforeend', '<button class="btn-checkout" type="button" id="clearCartBtn" style="margin-top:10px;background:var(--black);">Clear Cart</button>');
-  document.getElementById('clearCartBtn')?.addEventListener('click', clearLocalCart);
+  init();
 })();

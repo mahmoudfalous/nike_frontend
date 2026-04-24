@@ -1,0 +1,129 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class auth_group {
+   name: varchar(150)
+   id: integer
+}
+class auth_group_permissions {
+   group_id: integer
+   permission_id: integer
+   id: bigint
+}
+class auth_permission {
+   name: varchar(255)
+   content_type_id: integer
+   codename: varchar(100)
+   id: integer
+}
+class cart {
+   quantity: integer
+   added_at: timestamp with time zone
+   updated_at: timestamp with time zone
+   user_id: integer
+   product_id: integer
+   id: integer
+}
+class categories {
+   name: varchar(255)
+   slug: varchar(255)
+   description: text
+   created_at: timestamp with time zone
+   updated_at: timestamp with time zone
+   id: integer
+}
+class django_admin_log {
+   action_time: timestamp with time zone
+   object_id: text
+   object_repr: varchar(200)
+   action_flag: smallint
+   change_message: text
+   content_type_id: integer
+   user_id: integer
+   id: integer
+}
+class django_content_type {
+   app_label: varchar(100)
+   model: varchar(100)
+   id: integer
+}
+class django_migrations {
+   app: varchar(255)
+   name: varchar(255)
+   applied: timestamp with time zone
+   id: bigint
+}
+class django_session {
+   session_data: text
+   expire_date: timestamp with time zone
+   session_key: varchar(40)
+}
+class order_items {
+   quantity: integer
+   price_at_order: numeric(10,2)
+   order_id: integer
+   product_id: integer
+   id: integer
+}
+class orders {
+   total_price: numeric(10,2)
+   status: varchar(20)
+   created_at: timestamp with time zone
+   updated_at: timestamp with time zone
+   user_id: integer
+   id: integer
+}
+class products {
+   name: varchar(255)
+   description: text
+   price: numeric(10,2)
+   stock: integer
+   created_at: timestamp with time zone
+   updated_at: timestamp with time zone
+   category_id: integer
+   id: integer
+}
+class users {
+   password: varchar(128)
+   last_login: timestamp with time zone
+   is_superuser: boolean
+   full_name: varchar(255)
+   email: varchar(254)
+   phone: varchar(20)
+   address: text
+   is_active: boolean
+   is_staff: boolean
+   created_at: timestamp with time zone
+   updated_at: timestamp with time zone
+   id: integer
+}
+class users_groups {
+   customuser_id: integer
+   group_id: integer
+   id: bigint
+}
+class users_user_permissions {
+   customuser_id: integer
+   permission_id: integer
+   id: bigint
+}
+
+auth_group_permissions  -[#595959,plain]-^  auth_group             : "group_id:id"
+auth_group_permissions  -[#595959,plain]-^  auth_permission        : "permission_id:id"
+auth_permission         -[#595959,plain]-^  django_content_type    : "content_type_id:id"
+cart                    -[#595959,plain]-^  products               : "product_id:id"
+cart                    -[#595959,plain]-^  users                  : "user_id:id"
+django_admin_log        -[#595959,plain]-^  django_content_type    : "content_type_id:id"
+django_admin_log        -[#595959,plain]-^  users                  : "user_id:id"
+order_items             -[#595959,plain]-^  orders                 : "order_id:id"
+order_items             -[#595959,plain]-^  products               : "product_id:id"
+orders                  -[#595959,plain]-^  users                  : "user_id:id"
+products                -[#595959,plain]-^  categories             : "category_id:id"
+users_groups            -[#595959,plain]-^  auth_group             : "group_id:id"
+users_groups            -[#595959,plain]-^  users                  : "customuser_id:id"
+users_user_permissions  -[#595959,plain]-^  auth_permission        : "permission_id:id"
+users_user_permissions  -[#595959,plain]-^  users                  : "customuser_id:id"
+@enduml

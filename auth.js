@@ -209,16 +209,18 @@
       }
 
       const authState = saveAuthResponse(data, payload.email);
-      const successMessage =
-        type === 'register'
-          ? extractApiMessage(data, 'Account created successfully.')
-          : extractApiMessage(data, 'Logged in successfully.') || 'Logged in successfully.';
+      const successMessage = type === 'register'
+        ? 'Account created successfully.'
+        : 'Logged in successfully.';
 
       setFormMessage(form, successMessage, 'success');
       showToast(successMessage);
 
       window.setTimeout(() => {
-        if (type === 'login' || authState.access) {
+        if (type === 'login') {
+          const nextPath = getSafeNextPath();
+          window.location.href = nextPath || HOME_URL;
+        } else if (authState.access) {
           window.location.href = HOME_URL;
         } else {
           const redirectEmail = encodeURIComponent(payload.email || '');
@@ -240,6 +242,14 @@
     if (!email) return;
     const input = form.querySelector('[name="email"]');
     if (input && !input.value) input.value = email;
+  }
+
+  function getSafeNextPath() {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get('next');
+    if (!next) return '';
+    if (next.startsWith('http://') || next.startsWith('https://') || next.startsWith('//')) return '';
+    return next;
   }
 
   document.querySelectorAll('[data-auth-form]').forEach((form) => {

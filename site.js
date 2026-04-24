@@ -163,40 +163,92 @@
     toast._hideTimer = window.setTimeout(() => toast.classList.remove('show'), 2800);
   }
 
-  function productCardHTML(product, { actionLabel = 'Add to Cart', actionHref = '', showCategory = false } = {}) {
-    const id = product.id ?? product.product_id ?? product.pk;
-    const href = actionHref || `product.html?id=${encodeURIComponent(id)}`;
-    const category = slugify(product.category || product.brand || 'featured');
-    return `
-      <article class="product-card">
-        <a class="product-img-link" href="${href}">
-          <div class="product-img">
-            ${product.tag ? `<div class="product-tag">${product.tag}</div>` : ''}
-            <img src="${product.img || product.image || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80'}" alt="${product.name}" loading="lazy">
-            <div class="product-actions">
-              <button type="button" onclick="window.NikeStore.quickAddToCart(${JSON.stringify(id)})">${actionLabel}</button>
-              <a class="icon-btn" href="${href}" aria-label="View ${product.name}">↗</a>
-            </div>
-          </div>
-        </a>
-        <div class="stars">${renderStars(product.rating || 5)}</div>
-        ${showCategory ? `<div class="product-brand"><a href="category.html?slug=${encodeURIComponent(category)}">${product.brand || categoryLabel(category)}</a></div>` : `<div class="product-brand">${product.brand || ''}</div>`}
-        <div class="product-name"><a href="${href}">${product.name}</a></div>
-        <div class="product-price">
-          <span class="price-current">${currency(product.price)}</span>
-          ${product.oldPrice ? `<span class="price-old">${currency(product.oldPrice)}</span>` : ''}
-        </div>
-      </article>`;
+  function emitCartUpdated() {
+    window.dispatchEvent(new CustomEvent('nike:cart-updated'));
   }
 
-  async function quickAddToCart(productId) {
+  function buildNextParam() {
+    const current = `${window.location.pathname.split('/').pop() || 'file.html'}${window.location.search || ''}`;
+    return encodeURIComponent(current);
+  }
+
+  function ensureLoggedInForCartAction() {
+    if (isLoggedIn()) return true;
+    showToast('Please log in to add items to cart.');
+    window.setTimeout(() => {
+      window.location.href = `login.html?next=${buildNextParam()}`;
+    }, 500);
+    return false;
+  }
+
+  function productCardHTML(product, { actionLabel = 'Add to Cart', actionHref = '', showCategory = false } = {}) {
+    // 1. Prioritize 'id' from your SQL schema
+    const id = product.id;
+    const href = actionHref || `product.html?id=${encodeURIComponent(id)}`;
+
+    // 2. Use 'category_slug' from your API for filtering
+    const categorySlug = product.category_slug || 'all';
+    const categoryName = product.category_name || 'Nike';
+
+    // 3. Use 'image_url' from your SQL INSERTs
+    const image = product.image_url || 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80';
+
+    return `
+    <article class="product-card">
+      <a class="product-img-link" href="${href}">
+        <div class="product-img">
+          ${product.tag ? `<div class="product-tag">${product.tag}</div>` : ''}
+          <img src="${image}" alt="${product.name}" loading="lazy">
+          
+          <div class="product-actions">
+            <button type="button" onclick="window.NikeStore.quickAddToCart(${id}, event)">
+              ${actionLabel}
+            </button>
+            <a class="icon-btn" href="${href}" aria-label="View ${product.name}">↗</a>
+          </div>
+        </div>
+      </a>
+      
+      <div class="stars">${renderStars(product.rating || 5)}</div>
+      
+      ${showCategory
+      ? `<div class="product-brand"><a href="category.html?slug=${encodeURIComponent(categorySlug)}">${categoryName}</a></div>`
+      : `<div class="product-brand">${categoryName}</div>`
+    }
+      
+      <div class="product-name">
+        <a href="${href}">${product.name}</a>
+      </div>
+      
+      <div class="product-price">
+        <span class="price-current">${currency(product.price)}</span>
+        ${product.old_price ? `<span class="price-old">${currency(product.old_price)}</span>` : ''}
+      </div>
+    </article>`;
+  }
+  async function quickAddToCart(productId, event) {
+    if (event && typeof event.preventDefault === 'function') {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     try {
-      await addToCart(productId, 1);
+      await guardedAddToCart(productId, 1);
       showToast('Added to cart');
+      emitCartUpdated();
     } catch (error) {
+      if (error?.code === 'AUTH_REQUIRED') return;
       showToast(error.message || 'Could not add item');
     }
   }
+
+  const guardedAddToCart = async (product, quantity = 1) => {
+    if (!ensureLoggedInForCartAction()) {
+      const error = new Error('Authentication required.');
+      error.code = 'AUTH_REQUIRED';
+      throw error;
+    }
+    return addToCart(product, quantity);
+  };
 
   function renderAuthNav(container, { loginUrl = 'login.html', registerUrl = 'register.html', ordersUrl = 'orders.html' } = {}) {
     const target = typeof container === 'string' ? document.querySelector(container) : container;
@@ -238,7 +290,7 @@
   window.NikeStore.getProduct = getProduct;
   window.NikeStore.getCart = getCart;
   window.NikeStore.getCartTotal = getCartTotal;
-  window.NikeStore.addToCart = addToCart;
+  window.NikeStore.addToCart = guardedAddToCart;
   window.NikeStore.quickAddToCart = quickAddToCart;
   window.NikeStore.updateCartItem = updateCartItem;
   window.NikeStore.removeCartItem = removeCartItem;
