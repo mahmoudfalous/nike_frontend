@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In | Stylish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="file.css">
+</head>
+
+<body class="auth-page">
+  <header class="auth-nav">
+    <a class="logo" href="file.html">Styli<span>sh</span></a>
+    <a class="auth-home-link" href="register.html">Create account</a>
+  </header>
+
+  <main class="auth-shell">
+    <section class="auth-hero">
+      <div>
+        <span class="auth-eyebrow">Nike E-Commerce API</span>
+        <h1>Welcome back.</h1>
+        <p>Sign in to sync your cart, access your orders, and continue shopping where you left off.</p>
+        <div class="auth-benefits">
+          <div class="auth-benefit">
+            <span>✓</span>
+            <div>
+              <strong>Fast checkout</strong>
+              <p>Your saved details help you move from cart to order in fewer steps.</p>
+            </div>
+          </div>
+          <div class="auth-benefit">
+            <span>✓</span>
+            <div>
+              <strong>Order tracking</strong>
+              <p>Review your previous purchases and keep tabs on delivery status.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="auth-card">
+      <h2>Log In</h2>
+      <p>Use your account email and password to access the store.</p>
+
+      <div class="auth-message" data-auth-message hidden></div>
+
+      <form class="auth-form" data-auth-form="login" novalidate>
+        <div class="auth-field">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" name="email" placeholder="user@example.com" autocomplete="email" required>
+          <span class="field-error" data-error-for="email"></span>
+        </div>
+
+        <div class="auth-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+          <span class="field-error" data-error-for="password"></span>
+        </div>
+
+        <div class="auth-actions">
+          <label class="auth-checkbox">
+            <input type="checkbox" name="remember_me">
+            <span>Remember me</span>
+          </label>
+          <a class="auth-home-link" href="file.html">Back to store</a>
+        </div>
+
+        <button class="btn-primary auth-submit" type="submit">Log In</button>
+      </form>
+
+      <div class="auth-cta">
+        New here? <a href="register.html">Create an account</a>
+      </div>
+      <div class="auth-footnote">
+        Endpoint used: <strong>POST /api/auth/login/</strong>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMsg">Ready</span>
+  </div>
+
+  <script src="auth.js"></script>
+  <script src="site.js"></script>
+</body>
+
+</html>
+

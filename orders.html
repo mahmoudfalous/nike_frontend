@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orders | Stylish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="file.css">
+</head>
+
+<body class="catalog-page">
+  <nav>
+    <div class="logo"><a href="file.html">Styli<span>sh</span></a></div>
+    <ul class="nav-links">
+      <li><a href="file.html">Home</a></li>
+      <li><a href="category.html?slug=men">Men</a></li>
+      <li><a href="category.html?slug=women">Women</a></li>
+      <li><a href="category.html?slug=kids">Kids</a></li>
+      <li><a href="orders.html" class="active">Orders</a></li>
+    </ul>
+    <div class="nav-auth" data-site-auth></div>
+  </nav>
+
+  <main class="catalog-shell">
+    <section class="catalog-hero">
+      <div>
+        <span class="catalog-eyebrow">Order Center</span>
+        <h1>Your orders</h1>
+        <p>Review your purchase history, refresh order details, and update status if you are an admin.</p>
+      </div>
+      <div class="catalog-hero-card">
+        <span>Endpoint</span>
+        <strong>GET /api/orders/</strong>
+        <p>Create a new order from the cart or manage order status from here.</p>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div class="section-header">
+        <h2>Orders</h2>
+        <a href="file.html">Back to store</a>
+      </div>
+      <div class="orders-grid" data-orders-grid></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMsg">Ready</span>
+  </div>
+
+  <script src="site.js"></script>
+  <script src="orders.js"></script>
+</body>
+
+</html>
+

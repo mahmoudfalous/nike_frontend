@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Category | Stylish</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=DM+Sans:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="file.css">
+</head>
+
+<body class="catalog-page">
+  <nav>
+    <div class="logo"><a href="file.html">Styli<span>sh</span></a></div>
+    <ul class="nav-links">
+      <li><a href="file.html">Home</a></li>
+      <li><a href="category.html?slug=men">Men</a></li>
+      <li><a href="category.html?slug=women">Women</a></li>
+      <li><a href="category.html?slug=kids">Kids</a></li>
+      <li><a href="orders.html">Orders</a></li>
+    </ul>
+    <div class="nav-auth" data-site-auth></div>
+  </nav>
+
+  <main class="catalog-shell">
+    <section class="catalog-hero">
+      <div>
+        <span class="catalog-eyebrow">Category Collection</span>
+        <h1 data-category-title>Browse Products</h1>
+        <p data-category-description>Loading products from the API...</p>
+      </div>
+      <div class="catalog-hero-card">
+        <span>Filter</span>
+        <strong data-category-count>0 items</strong>
+        <p>Tap a product to see the full detail page or add it straight to cart.</p>
+      </div>
+    </section>
+
+    <section class="catalog-section">
+      <div class="section-header">
+        <h2>Products</h2>
+        <a href="product.html?id=1">Open a product</a>
+      </div>
+      <div class="chip-list" data-category-chips></div>
+      <div class="products-grid" data-category-grid></div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">
+    <span>✓</span>
+    <span id="toastMsg">Ready</span>
+  </div>
+
+  <script src="site.js"></script>
+  <script src="category.js"></script>
+</body>
+
+</html>
+
